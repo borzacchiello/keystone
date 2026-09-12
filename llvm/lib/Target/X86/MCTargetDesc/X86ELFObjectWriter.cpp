@@ -103,6 +103,7 @@ static unsigned getRelocType64(MCContext &Ctx, SMLoc Loc,
     case RT64_8:
       return IsPCRel ? ELF::R_X86_64_PC8 : ELF::R_X86_64_8;
     }
+    llvm_unreachable("unexpected relocation type!");
   case MCSymbolRefExpr::VK_GOT:
     switch (Type) {
     case RT64_64:
@@ -114,6 +115,7 @@ static unsigned getRelocType64(MCContext &Ctx, SMLoc Loc,
     case RT64_8:
       llvm_unreachable("Unimplemented");
     }
+    llvm_unreachable("unexpected relocation type!");
   case MCSymbolRefExpr::VK_GOTOFF:
     assert(Type == RT64_64);
     assert(!IsPCRel);
@@ -130,6 +132,7 @@ static unsigned getRelocType64(MCContext &Ctx, SMLoc Loc,
     case RT64_8:
       llvm_unreachable("Unimplemented");
     }
+    llvm_unreachable("unexpected relocation type!");
   case MCSymbolRefExpr::VK_DTPOFF:
     assert(!IsPCRel);
     switch (Type) {
@@ -142,6 +145,7 @@ static unsigned getRelocType64(MCContext &Ctx, SMLoc Loc,
     case RT64_8:
       llvm_unreachable("Unimplemented");
     }
+    llvm_unreachable("unexpected relocation type!");
   case MCSymbolRefExpr::VK_SIZE:
     assert(!IsPCRel);
     switch (Type) {
@@ -154,6 +158,7 @@ static unsigned getRelocType64(MCContext &Ctx, SMLoc Loc,
     case RT64_8:
       llvm_unreachable("Unimplemented");
     }
+    llvm_unreachable("unexpected relocation type!");
   case MCSymbolRefExpr::VK_TLSGD:
     checkIs32(Ctx, Loc, Type);
     return ELF::R_X86_64_TLSGD;
@@ -203,6 +208,7 @@ static unsigned getRelocType32(MCSymbolRefExpr::VariantKind Modifier,
     case RT32_8:
       return IsPCRel ? ELF::R_386_PC8 : ELF::R_386_8;
     }
+    llvm_unreachable("unexpected relocation type!");
   case MCSymbolRefExpr::VK_GOT:
     assert(Type == RT32_32);
     return IsPCRel ? ELF::R_386_GOTPC : ELF::R_386_GOT32;
