@@ -13,13 +13,15 @@ class TestX86(regress.RegressTest):
     def runTest(self):
         def sym_resolver(symbol, value):
             # is this the missing symbol we want to handle?
-            if symbol == "ZwQueryInformationProcess":
+            # the callback is CFUNCTYPE(c_bool, c_char_p, POINTER(c_uint64)),
+            # so the name arrives as bytes and the value is written through
+            # the pointer rather than rebound
+            if symbol == b"ZwQueryInformationProcess":
                 # put value of this symbol in @value
-                value = 0x7FF98A050840
+                value[0] = 0x7FF98A050840
                 # we handled this symbol, so return true
-                print 'sym_resolver called!'
                 return True
- 
+
             # we did not handle this symbol, so return false
             return False
 
