@@ -110,6 +110,7 @@ public:
         P->getFirst() = EmptyKey;
       }
     }
+    (void)NumEntries; // only read by the assert below
     assert(NumEntries == 0 && "Node count imbalance!");
     setNumEntries(0);
     setNumTombstones(0);
