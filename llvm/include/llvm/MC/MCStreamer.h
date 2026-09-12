@@ -156,7 +156,10 @@ private:
 /// a .s file, and implementations that write out .o files of various formats.
 ///
 class MCStreamer {
-  mutable void *KsSymResolver;
+  // keystone additions: initialise here, the constructors below do not
+  // touch them. Left uninitialised, a streamer built on memory freed by a
+  // previous engine inherits that engine's resolver pointer and calls it.
+  mutable void *KsSymResolver = nullptr;
   MCContext &Context;
   std::unique_ptr<MCTargetStreamer> TargetStreamer;
 

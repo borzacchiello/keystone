@@ -57,8 +57,9 @@ struct DataRegionData {
 
 class MCAssembler {
   friend class MCAsmLayout;
-  mutable unsigned KsError;
-  mutable void *KsSymResolver;
+  // keystone additions: see the note in MCStreamer, same hazard here
+  mutable unsigned KsError = 0;
+  mutable void *KsSymResolver = nullptr;
 
 public:
   void setError(unsigned E) const { KsError = E; }
