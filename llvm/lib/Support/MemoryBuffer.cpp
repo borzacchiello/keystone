@@ -361,7 +361,7 @@ getOpenFileImpl(int FD, const Twine &Filename, uint64_t FileSize,
         new (NamedBufferAlloc(Filename))
         MemoryBufferMMapFile(RequiresNullTerminator, FD, MapSize, Offset, EC));
     if (!EC)
-      return std::move(Result);
+      return Result;
   }
 
   std::unique_ptr<MemoryBuffer> Buf =
@@ -400,7 +400,7 @@ getOpenFileImpl(int FD, const Twine &Filename, uint64_t FileSize,
     BufPtr += NumRead;
   }
 
-  return std::move(Buf);
+  return Buf;
 }
 
 ErrorOr<std::unique_ptr<MemoryBuffer>>
