@@ -1539,6 +1539,7 @@ bool PPCAsmParser::ParseOperand(OperandVector &Operands) {
         return false;
       }
     }
+    [[fallthrough]];
   // Fall-through to process non-register-name identifiers as expression.
   // All other expressions
   case AsmToken::LParen:
