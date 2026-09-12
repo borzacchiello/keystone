@@ -115,7 +115,11 @@ unsigned X86AsmInstrumentation::GetFrameRegGeneric(const MCContext &Ctx,
                                                    MCStreamer &Out) {
   if (!Out.getNumFrameInfos()) // No active dwarf frame
     return X86::NoRegister;
-  const MCDwarfFrameInfo &Frame = Out.getDwarfFrameInfos().back();
+  // Bind the ArrayRef to a local first: back() points into the streamer's own
+  // vector, but reading it straight off the returned temporary makes GCC's
+  // -Wdangling-reference believe the reference outlives its owner.
+  ArrayRef<MCDwarfFrameInfo> FrameInfos = Out.getDwarfFrameInfos();
+  const MCDwarfFrameInfo &Frame = FrameInfos.back();
   if (Frame.End) // Active dwarf frame is closed
     return X86::NoRegister;
   const MCRegisterInfo *MRI = Ctx.getRegisterInfo();
