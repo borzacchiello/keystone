@@ -265,8 +265,9 @@ bool HexagonMCChecker::checkBranches() {
   HexagonMCErrInfo errInfo;
   if (HexagonMCInstrInfo::isBundle(MCB)) {
     bool hasConditional = false;
-    unsigned Branches = 0, Returns = 0, NewIndirectBranches = 0,
-             NewValueBranches = 0, Conditional = HEXAGON_PRESHUFFLE_PACKET_SIZE,
+    // Returns/NewIndirectBranches/NewValueBranches used to feed diagnostics
+    // that keystone does not emit, so they are not tracked any more.
+    unsigned Branches = 0, Conditional = HEXAGON_PRESHUFFLE_PACKET_SIZE,
              Unconditional = HEXAGON_PRESHUFFLE_PACKET_SIZE;
 
     for (unsigned i = HexagonMCInstrInfo::bundleInstructionsOffset;
@@ -278,12 +279,6 @@ bool HexagonMCChecker::checkBranches() {
       if (HexagonMCInstrInfo::getDesc(MCII, MCI).isBranch() ||
           HexagonMCInstrInfo::getDesc(MCII, MCI).isCall()) {
         ++Branches;
-        if (HexagonMCInstrInfo::getDesc(MCII, MCI).isIndirectBranch() &&
-            HexagonMCInstrInfo::isPredicatedNew(MCII, MCI))
-          ++NewIndirectBranches;
-        if (HexagonMCInstrInfo::isNewValue(MCII, MCI))
-          ++NewValueBranches;
-
         if (HexagonMCInstrInfo::isPredicated(MCII, MCI) ||
             HexagonMCInstrInfo::isPredicatedNew(MCII, MCI)) {
           hasConditional = true;
@@ -292,9 +287,6 @@ bool HexagonMCChecker::checkBranches() {
           Unconditional = i; // Record the position of the unconditional branch.
         }
       }
-      if (HexagonMCInstrInfo::getDesc(MCII, MCI).isReturn() &&
-          HexagonMCInstrInfo::getDesc(MCII, MCI).mayLoad())
-        ++Returns;
     }
 
     if (Branches) // FIXME: should "Defs.count(Hexagon::PC)" be here too?
