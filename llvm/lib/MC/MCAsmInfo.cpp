@@ -23,6 +23,13 @@
 using namespace llvm_ks;
 
 MCAsmInfo::MCAsmInfo() {
+  // Radix is a keystone addition and was left out of this list. AsmLexer
+  // caches it as its default number base, so an uninitialised value makes
+  // integer parsing depend on whatever was last in that heap slot: reuse a
+  // freed MCAsmInfo whose bytes happen to hold 16 and every plain integer is
+  // suddenly read as hex.
+  Radix = 10;
+
   PointerSize = 4;
   CalleeSaveStackSlotSize = 4;
 
