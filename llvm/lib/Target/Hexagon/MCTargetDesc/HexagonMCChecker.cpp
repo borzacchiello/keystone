@@ -354,8 +354,7 @@ bool HexagonMCChecker::checkPredicates() {
 
 // Check legal use of new values.
 bool HexagonMCChecker::checkNewValues() {
-  HexagonMCErrInfo errInfo;
-  memset(&errInfo, 0, sizeof(errInfo));
+  HexagonMCErrInfo errInfo; // the constructor resets it
   for (auto& I : NewUses) {
     unsigned R = I.first;
     NewSense &US = I.second;
