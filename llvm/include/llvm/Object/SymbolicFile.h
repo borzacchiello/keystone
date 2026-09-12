@@ -54,11 +54,17 @@ inline bool operator<(const DataRefImpl &a, const DataRefImpl &b) {
 }
 
 template <class content_type>
-class content_iterator
-    : public std::iterator<std::forward_iterator_tag, content_type> {
+class content_iterator {
   content_type Current;
 
 public:
+  // std::iterator is deprecated in C++17; spell out the members it provided
+  typedef std::forward_iterator_tag iterator_category;
+  typedef content_type value_type;
+  typedef std::ptrdiff_t difference_type;
+  typedef content_type *pointer;
+  typedef content_type &reference;
+
   content_iterator(content_type symb) : Current(symb) {}
 
   const content_type *operator->() const { return &Current; }

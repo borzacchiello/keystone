@@ -47,8 +47,7 @@ namespace path {
 ///   ../        => ..,.
 ///   C:\foo\bar => C:,/,foo,bar
 /// @endcode
-class const_iterator
-    : public std::iterator<std::input_iterator_tag, const StringRef> {
+class const_iterator {
   StringRef Path;      ///< The entire path.
   StringRef Component; ///< The current component. Not necessarily in Path.
   size_t    Position;  ///< The iterators current position within Path.
@@ -58,6 +57,13 @@ class const_iterator
   friend const_iterator end(StringRef path);
 
 public:
+  // std::iterator is deprecated in C++17; spell out its members
+  typedef std::input_iterator_tag iterator_category;
+  typedef const StringRef value_type;
+  typedef std::ptrdiff_t difference_type;
+  typedef const StringRef *pointer;
+  typedef const StringRef &reference;
+
   reference operator*() const { return Component; }
   pointer   operator->() const { return &Component; }
   const_iterator &operator++();    // preincrement
@@ -73,8 +79,7 @@ public:
 /// This is an input iterator that iterates over the individual components in
 /// \a path in reverse order. The traversal order is exactly reversed from that
 /// of \a const_iterator
-class reverse_iterator
-    : public std::iterator<std::input_iterator_tag, const StringRef> {
+class reverse_iterator {
   StringRef Path;      ///< The entire path.
   StringRef Component; ///< The current component. Not necessarily in Path.
   size_t    Position;  ///< The iterators current position within Path.
@@ -83,6 +88,13 @@ class reverse_iterator
   friend reverse_iterator rend(StringRef path);
 
 public:
+  // std::iterator is deprecated in C++17; spell out its members
+  typedef std::input_iterator_tag iterator_category;
+  typedef const StringRef value_type;
+  typedef std::ptrdiff_t difference_type;
+  typedef const StringRef *pointer;
+  typedef const StringRef &reference;
+
   reference operator*() const { return Component; }
   pointer   operator->() const { return &Component; }
   reverse_iterator &operator++();    // preincrement

@@ -189,18 +189,17 @@ struct ilist_traits<const Ty> : public ilist_traits<Ty> {};
 // ilist_iterator<Node> - Iterator for intrusive list.
 //
 template<typename NodeTy>
-class ilist_iterator
-  : public std::iterator<std::bidirectional_iterator_tag, NodeTy, ptrdiff_t> {
+class ilist_iterator {
 
 public:
   typedef ilist_traits<NodeTy> Traits;
-  typedef std::iterator<std::bidirectional_iterator_tag,
-                        NodeTy, ptrdiff_t> super;
 
-  typedef typename super::value_type value_type;
-  typedef typename super::difference_type difference_type;
-  typedef typename super::pointer pointer;
-  typedef typename super::reference reference;
+  // std::iterator is deprecated in C++17; spell out the members it provided
+  typedef std::bidirectional_iterator_tag iterator_category;
+  typedef NodeTy value_type;
+  typedef ptrdiff_t difference_type;
+  typedef NodeTy *pointer;
+  typedef NodeTy &reference;
 private:
   pointer NodePtr;
 

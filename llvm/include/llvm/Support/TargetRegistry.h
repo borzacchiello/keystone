@@ -414,11 +414,19 @@ struct TargetRegistry {
   // function).
   TargetRegistry() = delete;
 
-  class iterator
-      : public std::iterator<std::forward_iterator_tag, Target, ptrdiff_t> {
+  class iterator {
     const Target *Current;
     explicit iterator(Target *T) : Current(T) {}
     friend struct TargetRegistry;
+
+  public:
+    // std::iterator is deprecated in C++17; spell out its members
+    typedef std::forward_iterator_tag iterator_category;
+    typedef Target value_type;
+    typedef ptrdiff_t difference_type;
+    typedef Target *pointer;
+    typedef Target &reference;
+
 
   public:
     iterator() : Current(nullptr) {}
