@@ -537,8 +537,20 @@ public:
     // If we just moved the element we're inserting, be sure to update
     // the reference.
     const T *EltPtr = &Elt;
+    // The increment runs only when &Elt lies inside our own buffer, i.e. the
+    // caller inserted an element of this very vector. When Elt is anything
+    // else -- typically a temporary -- the guard is false. GCC inlines the
+    // call, sees a single-element temporary and cannot follow the pointer
+    // comparison, so it reports a bogus out-of-bounds ++.
+#if LLVM_GNUC_PREREQ(4, 8, 0)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
     if (I <= EltPtr && EltPtr < this->EndX)
       ++EltPtr;
+#if LLVM_GNUC_PREREQ(4, 8, 0)
+#pragma GCC diagnostic pop
+#endif
 
     *I = *EltPtr;
     return I;
