@@ -783,6 +783,10 @@ MCInst HexagonMCInstrInfo::deriveSubInst(MCInst const &Inst) {
       addOps(Result, Inst, 2);
       break; //  1,3 SUBInst $Rdd = combine(#2, #$u2)
     }
+    // getDuplexCandidateGroup() only admits this instruction when operand 1
+    // fits in 2 unsigned bits, so the four cases above are exhaustive. Falling
+    // into A4_combineir would encode an immediate operand as a register.
+    break;
   case Hexagon::A4_combineir:
     Result.setOpcode(Hexagon::V4_SA1_combinezr);
     addOps(Result, Inst, 0);
@@ -893,6 +897,10 @@ MCInst HexagonMCInstrInfo::deriveSubInst(MCInst const &Inst) {
       addOps(Result, Inst, 1);
       break; //  2 1,2 SUBInst memb($Rs + #$u4_0)=#1
     }
+    // The stored immediate is gated on inRange<1>(), so it is 0 or 1 and both
+    // cases above break. Falling into S2_storerb_io would turn the
+    // store-immediate into a store-register and read operand 2 as a register.
+    break;
   case Hexagon::S2_storerb_io:
     Result.setOpcode(Hexagon::V4_SS1_storeb_io);
     addOps(Result, Inst, 0);
@@ -929,6 +937,9 @@ MCInst HexagonMCInstrInfo::deriveSubInst(MCInst const &Inst) {
       addOps(Result, Inst, 2);
       break; //  1 2,3 SUBInst memw(r29 + #$u5_2) = $Rt
     }
+    // See S4_storeirb_io above: the immediate is 0 or 1, so this is
+    // unreachable, and S2_storeri_io would mis-encode a store-immediate.
+    break;
   case Hexagon::S2_storeri_io:
     if (Inst.getOperand(0).getReg() == Hexagon::R29) {
       Result.setOpcode(Hexagon::V4_SS2_storew_sp);
