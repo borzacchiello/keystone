@@ -92,6 +92,13 @@ public:
   BufferKind getBufferKind() const override {
     return MemoryBuffer_Malloc;
   }
+
+  // The allocation is larger than sizeof(*this): the name (and, for
+  // getNewUninitMemBuffer(), the data) is tail-allocated after the object.
+  // Declaring an unsized operator delete keeps the compiler from emitting a
+  // sized deallocation with the class size, which does not match what was
+  // allocated.
+  void operator delete(void *p) { ::operator delete(p); }
 };
 }
 
@@ -219,6 +226,9 @@ public:
   BufferKind getBufferKind() const override {
     return MemoryBuffer_MMap;
   }
+
+  // See the comment on MemoryBufferMem::operator delete.
+  void operator delete(void *p) { ::operator delete(p); }
 };
 }
 
