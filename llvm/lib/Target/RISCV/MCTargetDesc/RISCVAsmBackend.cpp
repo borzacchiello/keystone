@@ -169,7 +169,7 @@ bool RISCVAsmBackend::writeNopData(uint64_t Count, MCObjectWriter * OW) const {
   return true;
 }
 
-static uint64_t adjustFixupValue(const MCFixup &Fixup, uint64_t Value, unsigned int KsError) {
+static uint64_t adjustFixupValue(const MCFixup &Fixup, uint64_t Value, unsigned int &KsError) {
                                   
   unsigned Kind = Fixup.getKind();
   switch (Kind) {
