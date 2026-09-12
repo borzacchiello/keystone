@@ -3555,6 +3555,7 @@ bool AArch64AsmParser::validateInstruction(MCInst &Inst,
       //                     "is also a destination");
       return true;
     // FALLTHROUGH
+    [[fallthrough]];
   }
   case AArch64::LDPDi:
   case AArch64::LDPQi:

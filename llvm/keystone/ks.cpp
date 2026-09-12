@@ -566,6 +566,7 @@ ks_err ks_option(ks_engine *ks, ks_opt_type type, size_t value)
                 case KS_OPT_SYNTAX_NASM | KS_OPT_SYNTAX_RADIX16:
                 case KS_OPT_SYNTAX_INTEL | KS_OPT_SYNTAX_RADIX16:
                     ks->MAI->setRadix(16);
+                    [[fallthrough]];
                 case KS_OPT_SYNTAX_NASM:
                 case KS_OPT_SYNTAX_INTEL:
                     ks->syntax = (ks_opt_value)value;
@@ -574,6 +575,7 @@ ks_err ks_option(ks_engine *ks, ks_opt_type type, size_t value)
                 case KS_OPT_SYNTAX_GAS | KS_OPT_SYNTAX_RADIX16:
                 case KS_OPT_SYNTAX_ATT | KS_OPT_SYNTAX_RADIX16:
                     ks->MAI->setRadix(16);
+                    [[fallthrough]];
                 case KS_OPT_SYNTAX_GAS:
                 case KS_OPT_SYNTAX_ATT:
                     ks->syntax = (ks_opt_value)value;
