@@ -11,15 +11,17 @@ import subprocess
 import stat
 import sys
 import platform
-from distutils import log
+import logging
+from sysconfig import get_platform
 from setuptools import setup
-from distutils.util import get_platform
-from distutils.command.build import build as _build
-from distutils.command.sdist import sdist as _sdist
+from setuptools.command.build import build as _build
+from setuptools.command.sdist import sdist as _sdist
 from setuptools.command.bdist_egg import bdist_egg as _bdist_egg
 from setuptools.command.develop import develop as _develop
 
 #VERSION = '0.9.2' + 'rc1' + '.post2'
+log = logging.getLogger(__name__)
+
 VERSION = '0.9.3'
 SYSTEM = sys.platform
 IS_64BITS = platform.architecture()[0] == '64bit'
@@ -177,7 +179,7 @@ if 'bdist_wheel' in sys.argv and '--plat-name' not in sys.argv:
         sys.argv.insert(idx + 1, name.replace('.', '_').replace('-', '_'))
 
 
-long_desc = '''
+long_desc = r'''
 Keystone is a lightweight multi-platform, multi-architecture assembler framework.
 It offers some unparalleled features:
 
