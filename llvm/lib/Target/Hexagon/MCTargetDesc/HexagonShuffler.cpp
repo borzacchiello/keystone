@@ -215,16 +215,18 @@ bool HexagonShuffler::check() {
       break;
     case HexagonII::TypeJR:
       ++jumpr;
-    // Fall-through.
+      [[fallthrough]];
     case HexagonII::TypeJ:
       ++jumps;
       break;
     case HexagonII::TypeCVI_VM_VP_LDU:
       ++onlyNo1;
+      [[fallthrough]];
     case HexagonII::TypeCVI_VM_LD:
     case HexagonII::TypeCVI_VM_TMP_LD:
     case HexagonII::TypeCVI_VM_CUR_LD:
       ++CVIloads;
+      [[fallthrough]];
     case HexagonII::TypeLD:
       ++loads;
       ++memory;
@@ -235,9 +237,11 @@ bool HexagonShuffler::check() {
       break;
     case HexagonII::TypeCVI_VM_STU:
       ++onlyNo1;
+      [[fallthrough]];
     case HexagonII::TypeCVI_VM_ST:
     case HexagonII::TypeCVI_VM_NEW_ST:
       ++CVIstores;
+      [[fallthrough]];
     case HexagonII::TypeST:
       ++stores;
       ++memory;
