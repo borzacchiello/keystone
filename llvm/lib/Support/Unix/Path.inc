@@ -46,6 +46,10 @@
 # endif
 #endif
 
+#ifdef __COSMOPOLITAN__
+#include <libc/cosmo.h>
+#endif
+
 #ifdef __APPLE__
 #include <mach-o/dyld.h>
 #endif
@@ -126,7 +130,17 @@ getprogpath(char ret[PATH_MAX], const char *bin)
 /// GetMainExecutable - Return the path to the main executable, given the
 /// value of argv[0] from program startup.
 std::string getMainExecutable(const char *argv0, void *MainAddr) {
-#if defined(__APPLE__)
+#if defined(__COSMOPOLITAN__)
+  // Cosmopolitan produces one binary for many operating systems, so it
+  // defines neither __linux__ nor the dladdr/Dl_info that the generic Unix
+  // path below relies on. The runtime tracks its own path instead.
+  if (const char *exe_path = GetProgramExecutableName()) {
+    char link_path[MAXPATHLEN];
+    if (realpath(exe_path, link_path))
+      return link_path;
+    return exe_path;
+  }
+#elif defined(__APPLE__)
   // On OS X the executable path is saved to the stack by dyld. Reading it
   // from there is much faster than calling dladdr, especially for large
   // binaries with symbols.
