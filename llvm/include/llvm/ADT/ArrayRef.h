@@ -84,9 +84,20 @@ namespace llvm_ks {
       : Data(Arr), Length(N) {}
 
     /// Construct an ArrayRef from a std::initializer_list.
-    /*implicit*/ ArrayRef(const std::initializer_list<T> &Vec)
+#if LLVM_GNUC_PREREQ(9, 0, 0)
+// Take the list by value and silence -Winit-list-lifetime here: ArrayRef
+// deliberately does not extend the lifetime of what it points at, so every
+// caller already has to keep the underlying array alive. Warning at the
+// constructor instead produces one message per instantiation.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winit-list-lifetime"
+#endif
+    /*implicit*/ ArrayRef(std::initializer_list<T> Vec)
     : Data(Vec.begin() == Vec.end() ? (T*)nullptr : Vec.begin()),
       Length(Vec.size()) {}
+#if LLVM_GNUC_PREREQ(9, 0, 0)
+#pragma GCC diagnostic pop
+#endif
 
     /// Construct an ArrayRef<const T*> from ArrayRef<T*>. This uses SFINAE to
     /// ensure that only ArrayRefs of pointers can be converted.
