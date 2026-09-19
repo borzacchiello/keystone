@@ -384,7 +384,7 @@ static std::error_code fillStatus(int StatRet, const struct stat &Status,
 
   perms Perms = static_cast<perms>(Status.st_mode);
   Result =
-      file_status(Type, Perms, Status.st_dev, Status.st_ino, Status.st_mtime,
+      file_status(Type, Perms, Status.st_dev, Status.st_ino,
                   Status.st_uid, Status.st_gid, Status.st_size);
 
   return std::error_code();
