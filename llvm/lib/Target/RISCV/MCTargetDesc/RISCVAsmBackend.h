@@ -24,21 +24,16 @@ class MCObjectWriter;
 class raw_ostream;
 
 class RISCVAsmBackend : public MCAsmBackend {
-  
-
-  Triple::OSType OSType;
-  bool IsLittle; // Big or little endian
   bool Is64Bit;  // 32 or 64 bit words
   bool ForceRelocs = false;
   RISCVABI::ABI TargetABI = RISCVABI::ABI_Unknown;
   const MCSubtargetInfo &STI;
   const MCTargetOptions &TargetOptions;
-  uint8_t OSABI;
 
 public:
-  RISCVAsmBackend(const Target &T, Triple::OSType OSType, bool IsLittle,
-                 bool Is64Bit, const MCSubtargetInfo &STI, const MCTargetOptions &Options)
-      : MCAsmBackend(), OSType(OSType), IsLittle(IsLittle), Is64Bit(Is64Bit),STI(STI), TargetOptions(Options){
+  RISCVAsmBackend(const Target &T, bool Is64Bit, const MCSubtargetInfo &STI,
+                  const MCTargetOptions &Options)
+      : MCAsmBackend(), Is64Bit(Is64Bit), STI(STI), TargetOptions(Options){
     TargetABI = RISCVABI::computeTargetABI(
         STI.getTargetTriple(), STI.getFeatureBits(), Options.getABIName());
     RISCVFeatures::validate(STI.getTargetTriple(), STI.getFeatureBits());

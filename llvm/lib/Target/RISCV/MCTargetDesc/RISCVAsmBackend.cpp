@@ -372,5 +372,5 @@ MCObjectWriter* RISCVAsmBackend::createObjectWriter(raw_pwrite_stream &OS) const
 MCAsmBackend *llvm_ks::createRISCVAsmBackend(const Target &T,
                                              const MCRegisterInfo &MRI,
                                              const Triple &TT, StringRef CPU, const MCSubtargetInfo &STI, const MCTargetOptions &Options) {
-  return new RISCVAsmBackend(T, TT.getOS(), /*IsLittle*/ true, /*Is64Bit*/ TT.isArch64Bit(), STI, Options);
+  return new RISCVAsmBackend(T, /*Is64Bit*/ TT.isArch64Bit(), STI, Options);
 }

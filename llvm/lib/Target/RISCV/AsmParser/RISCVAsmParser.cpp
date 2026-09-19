@@ -47,7 +47,6 @@ struct RISCVOperand;
 unsigned int ErrCd = 0;
 class RISCVAsmParser : public MCTargetAsmParser {
   SmallVector<FeatureBitset, 4> FeatureBitStack;
-  RISCVABI::ABI ABI;
 
   SMLoc getLoc() const { return getParser().getTok().getLoc(); }
 
